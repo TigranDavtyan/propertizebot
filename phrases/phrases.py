@@ -753,3 +753,36 @@ def wrong_format(cid : int, all : bool = False) -> str:
     else: 
         lang = cid
     return phrases[lang]
+
+def renew_now(cid : int, all : bool = False) -> str:
+    '''♻️Renew now'''
+    phrases = ['''♻️Թարմացնել հիմա''', '''♻️Обнови сейчас''', '''♻️Renew now''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def renewd_n_items(cid : int,nRenews, all : bool = False) -> str:
+    '''♻️Updated [nRenews] listings♻️'''
+    phrases = ['''♻️Թարմացվել է [nRenews] հայտարարություն♻️''', '''♻️Обновлено [nRenews] объявлении♻️''', '''♻️Updated [nRenews] listings♻️''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang].replace("[nRenews]",str(nRenews))
+
+def cant_renew_for_30_mins(cid : int, all : bool = False) -> str:
+    '''❌ You cant renew now ❗️ You can renew once for every 30 minutes.'''
+    phrases = ['''❌ Այժմ չեք կարող թարմացնել ❗️ Կարող եք թարմացնել 30 րոպեն մեկ անգամ։''', '''❌ Обновить сейчас нельзя ❗️ Обновлять можно один раз каждые 30 минут.''', '''❌ You cant renew now ❗️ You can renew once for every 30 minutes.''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]

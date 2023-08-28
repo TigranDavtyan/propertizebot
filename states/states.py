@@ -81,3 +81,6 @@ class USER:
         INFO = State(200)
         PAY_INFO = State(210, 220)
         INVOICE = State(220)
+    
+    class ACTIONS:
+        RENEW = State(300)

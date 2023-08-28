@@ -3,8 +3,9 @@ from loader import db
 import requests
 from random import random
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
+import random
 
 USER_AGENTS = [
 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
@@ -59,9 +60,17 @@ headers = {
     "upgrade-insecure-requests": "1",
     "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
   }
-
+itemid_date = re.compile(r'Next renewal<br>(.+?)\"><?/?d?i?v?>?<a href=\"/edit/([0-9]+?)\" title=\"Edit\">')
+renewable_listings = re.compile(r"""onclick=\"renew\('(\d+?)'\)""")
 
 class User:
+    users = {}
+    @classmethod
+    def get(cls, cid):
+        if cid not in cls.users:
+            return cls(cid)
+        return cls.users[cid]
+
     def __init__(self, cid):
         self.cid = cid
         self.session = requests.session()
@@ -70,6 +79,8 @@ class User:
         self.headers['user_agent'] = USER_AGENTS[0]
         self.nRenews = 0
         self.nErrors = 0
+        self.latestRenew = None
+        User.users[cid] = self
 
     def login(self):
         phone, email, password = db.fetchone('SELECT phone_number, email, password FROM users WHERE cid = ?;', (self.cid,))
@@ -80,13 +91,15 @@ class User:
         res = self.session.post(login_url, self.login_body, headers = self.headers)
         self.session.close()
         return res.status_code
-    
+
     def getMyListings(self):
         res = self.session.get('https://www.list.am/en/my', headers = self.headers)
         if res.status_code == 200:
             return res.content.decode('utf-8')
         else:
-            self.login()
+            res = self.login()
+            if res != 200:
+                return res
             res = self.session.get('https://www.list.am/en/my', headers = self.headers)
             if res.status_code == 200:
                 return res.content.decode('utf-8')
@@ -100,26 +113,31 @@ class User:
             'form0_form_visited': '1',  # Required form field
             'Renew': 'Renew',  # The button value to renew
         }
-        res = self.session.post(f'https://www.list.am/en/my?w=7&i={itemid}', data=data, headers = self.headers)
+        res = self.session.post(f'https://www.list.am/my?w=7&i={itemid}', data=data, headers = self.headers)
         return res.status_code
-
+    async def sleep(self):
+        await asyncio.sleep(random.random() + 0.8)
+    
     async def renewListings(self):
+        if self.latestRenew and datetime.now() - self.latestRenew < timedelta(minutes=30):
+            return -1
+        
+        self.login()
         page = self.getMyListings()
-        await asyncio.sleep(0.5)
+        await self.sleep()
 
         if type(page) == int:
             raise ValueError(f'Cant get {self.cid} users listings. Status code {page}')
         
-        itemid_date = re.compile(r'Next renewal<br>(.+?)\"><?/?d?i?v?>?<a href=\"/edit/([0-9]+?)\" title=\"Edit\">')
-        items = itemid_date.findall(page)
-        now = datetime.now()
+        items = renewable_listings.findall(page)
         for item in items:
-            renew_date = datetime.strptime(item[0],"%A, %B %d, %Y %H:%M")
-            if renew_date < now:
-                res = self.renewListing(item[1])
-                await asyncio.sleep(0.5)
-                if res == 200:
-                    self.nRenews += 1
-                else:
-                    self.nErrors += 1
+            res = self.renewListing(item)
+            await self.sleep()
+            if res == 200:
+                self.nRenews += 1
+            else:
+                self.nErrors += 1
+
+        self.latestRenew = datetime.now()
         self.session.close()
+        return 0

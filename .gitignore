@@ -9,6 +9,7 @@ __pycache__/
 *.db
 *.ini
 *.chat
+launch.json
 
 # Distribution / packaging
 .Python

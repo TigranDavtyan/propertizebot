@@ -13,12 +13,12 @@ if platform.system() in ['Linux', 'Darwin']:
     TOKEN = '6109475663:AAFoAtl6ykt5uI0j2a82jr0tMaWWPPLZ_d4'
 
     BOT_USERNAME = 'PropertizeBot'
-    REPORT_CHANNEL_ID = -1001507986820
+    REPORT_CHANNEL_ID = -1001919616154
 else:
     print('Development mode on davtyantestbot')
-    TOKEN = os.environ.get('TEST_BOT_TOKEN')
-
-    BOT_USERNAME = 'propertizebot'
+    TOKEN = '5986440556:AAG7lYBgZWX8f2ZKS0wauyrAhWq9VqRZYwI'
+    
+    BOT_USERNAME = 'davtyantestbot'
     REPORT_CHANNEL_ID = -1001830553096
 
 PROJECT_NAME = "Propertize"

@@ -14,6 +14,7 @@ async def cmd_menu_user(message: Message, is_main_message: bool = False):
     password = db.fetchone('SELECT password FROM users WHERE cid = ?;', (cid,))[0]
     if password:
         markup.add(P.change_logpass(cid), USER.SIGNUP.INFO)
+        markup.add(P.renew_now(cid), USER.ACTIONS.RENEW)
     else:
         markup.add(P.signup(cid), USER.SIGNUP.INFO)
     markup.add(P.subscription(cid), USER.SUBSCRIPTION.INFO)
