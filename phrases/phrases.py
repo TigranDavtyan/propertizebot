@@ -786,3 +786,14 @@ def cant_renew_for_30_mins(cid : int, all : bool = False) -> str:
     else: 
         lang = cid
     return phrases[lang]
+
+def send_code(cid : int, all : bool = False) -> str:
+    '''❗️❗️❗️ A verification code has been sent to your phone or email. Please check your phone or email (which you use to log in to list.am) and then enter the code here to complete the verification process and log in.⬇️⬇️⬇️'''
+    phrases = ['''❗️❗️❗️ Հաստատման կոդը ուղարկվել է ձեր հեռախոսին կամ էլ․ փոստին։ Խնդրում եմ ստուգել ձեր հեռախոսը կամ էլ․փոստը(որը օգտագործում եք list.am մուտք գործելու համար) այնուհետև մուտքագրեք կոդը այստեղ՝ ստուգման գործընթացը ավարտելու և մուտք գործելու համար:⬇️⬇️⬇️''', '''❗️❗️❗️ Код подтверждения был отправлен на ваш телефон или электронную почту. Пожалуйста, проверьте свой телефон или электронную почту (которую вы используете для входа на list.am), а затем введите здесь код, чтобы завершить процесс проверки и войти в систему.⬇️⬇️⬇️''', '''❗️❗️❗️ A verification code has been sent to your phone or email. Please check your phone or email (which you use to log in to list.am) and then enter the code here to complete the verification process and log in.⬇️⬇️⬇️''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]

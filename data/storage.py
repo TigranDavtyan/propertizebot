@@ -1,3 +1,4 @@
+import ast
 import sqlite3 as lite
 import config
 import logging
@@ -46,11 +47,21 @@ class DatabaseManager(object):
     def setState(self, cid: int, state_id : int):
         self.query('UPDATE users SET state_id = ? WHERE cid=?;',(state_id,cid))
 
+    def getUserSettings(self, cid: int) -> dict:
+        settings = self.fetchone('SELECT settings FROM users WHERE cid = ?', (cid,))
+        if not settings:
+            return None
+        
+        return ast.literal_eval(settings[0])
+
+    def setUserSettings(self, cid: int, settings: dict):
+        self.query('UPDATE users SET settings = ? WHERE cid = ?', (str(settings), cid))
+
     def create_tables(self):
         self.query('''CREATE TABLE IF NOT EXISTS users
                    (cid INTEGER PRIMARY KEY, name TEXT, phone_number TEXT, email TEXT, password TEXT, token TEXT, joining_date DATETIME, account_state INTEGER,
                     state_id INTEGER, preferred_language INTEGER, subscription INTEGER DEFAULT 0, subscription_end DATETIME DEFAULT '2025-01-01 00:00:00',
-                      next_payment_amount INTEGER DEFAULT 0, referral_id TEXT DEFAULT '')''')
+                      next_payment_amount INTEGER DEFAULT 0, referral_id TEXT DEFAULT '', settings TEXT DEFAULT \{\})''')
 
     def query(self, arg, values=None):
         if values == None:

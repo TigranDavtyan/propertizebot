@@ -15,6 +15,7 @@ async def cmd_menu_user(message: Message, is_main_message: bool = False):
     if password:
         markup.add(P.change_logpass(cid), USER.SIGNUP.INFO)
         markup.add(P.renew_now(cid), USER.ACTIONS.RENEW)
+        markup.add(P.setup_renew_times(cid), USER.SETTINGS.INFO)
     else:
         markup.add(P.signup(cid), USER.SIGNUP.INFO)
     markup.add(P.subscription(cid), USER.SUBSCRIPTION.INFO)

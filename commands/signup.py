@@ -7,6 +7,9 @@ import datetime
 from utils import utils
 from listam import User as LUser
 import config
+import logging
+
+logger = logging.getLogger()
 
 @setActionFor(USER.SIGNUP.INFO)
 async def signup_info(message: Message):
@@ -53,8 +56,8 @@ async def handle_login(message: Message):
 @setActionFor(USER.SIGNUP.HANDLE_PASSWORD)
 async def handle_password(message: Message):
     cid, chat = message.chat.id,cm[message.chat.id]
-    password = db.fetchone('SELECT password FROM users WHERE cid = ?',(cid,))
-
+    oldPassword = db.fetchone('SELECT password FROM users WHERE cid = ?',(cid,))[0]
+    logger.info(f'Old password is {oldPassword} ;')
     db.query('UPDATE users SET password = ? WHERE cid = ?',(message.text, cid))
 
     user = LUser(cid)
@@ -62,7 +65,7 @@ async def handle_password(message: Message):
         markup = Buttons()
         markup.add(P.menu(cid), USER.MAIN_MENU)
 
-        if not password:
+        if not oldPassword:
             free_trial = utils.now() + datetime.timedelta(days=config.FREE_TRIAL_DAYS)
             db.query('UPDATE users SET subscription_end = ? WHERE cid = ?', (free_trial, cid))
 

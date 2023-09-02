@@ -62,6 +62,7 @@ class ADMIN:
 
 class USER:
     MAIN_MENU = State(10)
+    VERIFY = State(12)
 
     class SIGNUP:
         INFO = State(20)
@@ -83,4 +84,7 @@ class USER:
         INVOICE = State(220)
     
     class ACTIONS:
-        RENEW = State(300)
+        RENEW = State(300, 12)
+    
+    class SETTINGS:
+        INFO = State(400)
