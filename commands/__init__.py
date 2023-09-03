@@ -6,5 +6,6 @@ from .admin import dp
 from .referral import dp
 from .subscription import dp
 from .actions import dp
+from .settings import dp
 
 __all__ = ['dp']

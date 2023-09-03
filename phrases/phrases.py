@@ -183,6 +183,39 @@ def ok(cid : int, all : bool = False) -> str:
         lang = cid
     return phrases[lang]
 
+def add(cid : int, all : bool = False) -> str:
+    '''➕'''
+    phrases = ['''➕''', '''➕''', '''➕''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def details(cid : int, all : bool = False) -> str:
+    '''🧾'''
+    phrases = ['''🧾''', '''🧾''', '''🧾''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def delete(cid : int, all : bool = False) -> str:
+    '''❌'''
+    phrases = ['''❌''', '''❌''', '''❌''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
 def wrong_action(cid : int, all : bool = False) -> str:
     '''❌Wrong action❌
  Read the message again☝️, get /help from admin or go to /start and try again.'''
@@ -443,28 +476,6 @@ def november(cid : int, all : bool = False) -> str:
 def december(cid : int, all : bool = False) -> str:
     '''December'''
     phrases = ['''Դեկտեմբերի''', '''Декабрь''', '''December''']
-    if all:
-        return phrases
-    if cid > 10:
-        lang = db.getUserLang(cid)
-    else: 
-        lang = cid
-    return phrases[lang]
-
-def details(cid : int, all : bool = False) -> str:
-    '''🧾'''
-    phrases = ['''🧾''', '''🧾''', '''🧾''']
-    if all:
-        return phrases
-    if cid > 10:
-        lang = db.getUserLang(cid)
-    else: 
-        lang = cid
-    return phrases[lang]
-
-def cancel(cid : int, all : bool = False) -> str:
-    '''❌'''
-    phrases = ['''❌''', '''❌''', '''❌''']
     if all:
         return phrases
     if cid > 10:
@@ -790,6 +801,105 @@ def cant_renew_for_30_mins(cid : int, all : bool = False) -> str:
 def send_code(cid : int, all : bool = False) -> str:
     '''❗️❗️❗️ A verification code has been sent to your phone or email. Please check your phone or email (which you use to log in to list.am) and then enter the code here to complete the verification process and log in.⬇️⬇️⬇️'''
     phrases = ['''❗️❗️❗️ Հաստատման կոդը ուղարկվել է ձեր հեռախոսին կամ էլ․ փոստին։ Խնդրում եմ ստուգել ձեր հեռախոսը կամ էլ․փոստը(որը օգտագործում եք list.am մուտք գործելու համար) այնուհետև մուտքագրեք կոդը այստեղ՝ ստուգման գործընթացը ավարտելու և մուտք գործելու համար:⬇️⬇️⬇️''', '''❗️❗️❗️ Код подтверждения был отправлен на ваш телефон или электронную почту. Пожалуйста, проверьте свой телефон или электронную почту (которую вы используете для входа на list.am), а затем введите здесь код, чтобы завершить процесс проверки и войти в систему.⬇️⬇️⬇️''', '''❗️❗️❗️ A verification code has been sent to your phone or email. Please check your phone or email (which you use to log in to list.am) and then enter the code here to complete the verification process and log in.⬇️⬇️⬇️''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def setup_renew_times(cid : int, all : bool = False) -> str:
+    '''⚙️ Setup renew times'''
+    phrases = ['''⚙️ Կարգավորեք թարմացման ժամերը''', '''⚙️ Настройка времени обновления''', '''⚙️ Setup renew times''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def times_info(cid : int, all : bool = False) -> str:
+    '''These are the times the bot will automatically renew your listing.'''
+    phrases = ['''Սրանք այն ժամանակներն են, երբ բոտը ավտոմատ կթարմացնի ձեր հայտարարությունները:''', '''В эти времена бот будет автоматически обновлять ваши объявления.''', '''These are the times the bot will automatically renew your listing.''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def ask_new_time(cid : int, all : bool = False) -> str:
+    '''Enter the time you want to renew your listings, for example <code>15:00</code>'''
+    phrases = ['''Մուտքագրեք այն ժամը, երբ ցանկանում եք թարմացնել ձեր հայտարարությունները, օրինակ <code>15:00</code>''', '''Введите время, когда вы хотите обновить свои объявления, например <code>15:00</code>.''', '''Enter the time you want to renew your listings, for example <code>15:00</code>''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def ask_new_limit(cid : int, all : bool = False) -> str:
+    '''Enter the maximum number of listings you want to renew, for example <code>50</code>'''
+    phrases = ['''Մուտքագրեք հայտարարությունների առավելագույն քանակը, որոնք ցանկանում եք թարմացնել, օրինակ <code>50</code>''', '''Введите максимальное количество объявлений, которые вы хотите продлить, например <code>50</code>.''', '''Enter the maximum number of listings you want to renew, for example <code>50</code>''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def time_added_successfully(cid : int, all : bool = False) -> str:
+    '''✅ Renew time added successfully ✅'''
+    phrases = ['''✅ Թարմացնելու ժամը հաջողությամբ ավելացվեց ✅''', '''✅ Время объявления успешно добавлено ✅''', '''✅ Renew time added successfully ✅''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def change_time(cid : int, all : bool = False) -> str:
+    '''Enter a new time for renew, for example <code>15:00</code>'''
+    phrases = ['''Մուտքագրեք թարմացման նոր ժամ, օրինակ <code>15:00</code>''', '''Введите новое время объявления, например <code>15:00</code>.''', '''Enter a new time for renew, for example <code>15:00</code>''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def time_changed_successfully(cid : int, all : bool = False) -> str:
+    '''✅Time changed successfully ✅'''
+    phrases = ['''✅Ժամը հաջողությամբ փոխվեց ✅''', '''✅Время успешно изменено ✅''', '''✅Time changed successfully ✅''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def change_limit(cid : int, all : bool = False) -> str:
+    '''Enter a new limit, for example <code>50</code>'''
+    phrases = ['''Մուտքագրեք նոր սահմանաչափ, օրինակ <code>50</code>''', '''Введите новый лимит, например <code>50</code>.''', '''Enter a new limit, for example <code>50</code>''']
+    if all:
+        return phrases
+    if cid > 10:
+        lang = db.getUserLang(cid)
+    else: 
+        lang = cid
+    return phrases[lang]
+
+def limit_changed_successfully(cid : int, all : bool = False) -> str:
+    '''✅ Limit changed successfully ✅'''
+    phrases = ['''✅ Սահմանաչափը հաջողությամբ փոխվեց ✅''', '''✅ Лимит успешно изменен ✅''', '''✅ Limit changed successfully ✅''']
     if all:
         return phrases
     if cid > 10:

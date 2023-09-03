@@ -78,6 +78,7 @@ async def cmd_start(message: Message):
     if not db.userExists(cid):
         lang = DEFAULT_LANGUAGE
         db.query('INSERT INTO users (cid, name, joining_date, state_id, preferred_language)  VALUES (?, ?, ?, ?, ?)', (cid,message.from_user.full_name, utils.now(), GENERAL.START.ID, lang))
+        db.setUserSettings(cid, {'renews':{'09:00':0, '16:00':0}})
         await to_admin.new_user(message)
 
     if cid == ADMIN_CHAT_ID:

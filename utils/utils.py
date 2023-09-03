@@ -5,7 +5,8 @@ import datetime
 import hashlib
 import base64
 
-time_pattern = re.compile(r"^(?:(?:([01][0-9]|2[0-3]|[1-9]):)([0-5]?[0-9])) ?- ?(?:(?:([01][0-9]|2[0-3]|[1-9]):)([0-5]?[0-9]))$")
+time_interval_pattern = re.compile(r"^(?:(?:([01][0-9]|2[0-3]|[1-9]):)([0-5]?[0-9])) ?- ?(?:(?:([01][0-9]|2[0-3]|[1-9]):)([0-5]?[0-9]))$")
+time_pattern = re.compile(r"^(?:(?:([01][0-9]|2[0-3]|[1-9]):)([0-5]?[0-9]))")
 
 language_suffixes = ['phrase_arm','phrase_rus','phrase_eng']
 
@@ -50,10 +51,8 @@ def dateForUser4(date: datetime.date, cid: int):
 
 def parseTimeInterval(text:str):
     '''start_hour    start minutes    end hour       end minutes'''
-    global time_pattern
 
-    # Check if the time string matches the pattern
-    match = time_pattern.match(text)
+    match = time_interval_pattern.match(text)
     if match:#  start_hour    start minutes    end hour       end minutes
         return int(match.group(1)), int(match.group(2)), int(match.group(3)), int(match.group(4))
     else:
@@ -112,3 +111,6 @@ def ref_code_hash(cid: int) -> str:
     cid = hashlib.md5(cid).digest()
     return base64.urlsafe_b64encode(cid).decode('utf-8')
 
+def validateTime(timeStr: str) -> bool:
+    m = time_pattern.search(timeStr)
+    return m != None

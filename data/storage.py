@@ -61,7 +61,7 @@ class DatabaseManager(object):
         self.query('''CREATE TABLE IF NOT EXISTS users
                    (cid INTEGER PRIMARY KEY, name TEXT, phone_number TEXT, email TEXT, password TEXT, token TEXT, joining_date DATETIME, account_state INTEGER,
                     state_id INTEGER, preferred_language INTEGER, subscription INTEGER DEFAULT 0, subscription_end DATETIME DEFAULT '2025-01-01 00:00:00',
-                      next_payment_amount INTEGER DEFAULT 0, referral_id TEXT DEFAULT '', settings TEXT DEFAULT \{\})''')
+                      next_payment_amount INTEGER DEFAULT 0, referral_id TEXT DEFAULT '', settings TEXT DEFAULT "{{}}")''')
 
     def query(self, arg, values=None):
         if values == None:

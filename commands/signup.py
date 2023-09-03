@@ -41,7 +41,7 @@ async def handle_login(message: Message):
     isphone = utils.isPhoneNumber(message.text)
     isemail = utils.isEmail(message.text)
     if not isphone and not isemail:
-        await chat.send(P.wrong_format(cid))
+        await chat.send(P.wrong_format(cid), temporary=True)
         return
     if isphone:
         db.query('UPDATE users SET phone_number = ?, email = "" WHERE cid = ?',(message.text, cid))

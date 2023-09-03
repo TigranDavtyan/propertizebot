@@ -62,6 +62,17 @@ class Timers:
             return wrapper
         return decorator
 
+    def run_every_minute():
+        def decorator(function):
+            async def wrapper(*args, **kwargs):
+                await asyncio.sleep(60 - utils.now().second)
+                while True:
+                    await function(*args, **kwargs)
+                    
+                    await asyncio.sleep(60 - utils.now().second)
+            return wrapper
+        return decorator
+    
     def run_every(seconds):
         def decorator(function):
             async def wrapper(*args, **kwargs):
@@ -105,10 +116,9 @@ class Tasks:
         asyncio.create_task(self.save_old_chats())
         asyncio.create_task(self.check_user_subscriptions())
 
-        asyncio.create_task(self.renewAll1())
-        asyncio.create_task(self.renewAll2())
+        asyncio.create_task(self.renewAll())
 
-    @Timers.run_every_at_day(3600*24)
+    @Timers.run_everyday_at(datetime.time(hour=23, minute=0, second=0))
     async def report_activity(self):
         await to_admin.report()
 
@@ -127,16 +137,13 @@ class Tasks:
         for cid in ended_users:
             await to_users.subscription_ended(cid)
     
+    @Timers.run_every_minute()
     async def renewAll(self):
+        nowStr = utils.now().strftime('%H:%M')
         userids = [u[0] for u in db.fetchall('SELECT cid FROM users WHERE subscription > -1;')]
         for cid in userids:
-            user = LUser(cid)
-            await user.renewListings()
-
-    @Timers.run_everyday_at(datetime.time(hour=9, minute=0, second=0))
-    async def renewAll1(self):
-        await self.renewAll()
-
-    @Timers.run_everyday_at(datetime.time(hour=16, minute=0, second=0))
-    async def renewAll2(self):
-        await self.renewAll()
+            renews = db.getUserSettings(cid)['renews']
+            if nowStr in renews.keys():
+                limit = renews[nowStr]
+                user = LUser(cid)
+                asyncio.create_task(user.renewListings(limit))

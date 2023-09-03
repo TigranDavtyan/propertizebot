@@ -88,3 +88,13 @@ class USER:
     
     class SETTINGS:
         INFO = State(400)
+        ADD_TIME = State(410, 412)
+        HANDLE_NEW_TIME = State(412, 414)
+        HANDLE_NEW_LIMIT = State(414)
+
+
+        CHANGE_TIME = State(420, 422)
+        CHANGE_TIME_HANDLE = State(422)
+        CHANGE_LIMIT = State(424, 426)
+        CHANGE_LIMIT_HANDLE = State(426)
+        DELETE_TIME = State(430)

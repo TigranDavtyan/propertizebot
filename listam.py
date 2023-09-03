@@ -1,11 +1,12 @@
 import asyncio
-from loader import db
+from loader import db, cm
 import requests
 from random import random
 import re
 from datetime import datetime, timedelta
 import time
 import random
+from phrases import phrases as P
 import logging
 logger = logging.getLogger()
 
@@ -144,7 +145,7 @@ class User:
     async def sleep(self):
         await asyncio.sleep(random.random() + 0.8)
     
-    async def renewListings(self):
+    async def renewListings(self, limit):
         logger.debug(f'Renew all listings of user {self.cid}')
         if self.latestRenew and datetime.now() - self.latestRenew < timedelta(minutes=30):
             return -1
@@ -158,7 +159,10 @@ class User:
             raise ValueError(f'Cant get {self.cid} users listings. Status code {page}')
         
         items = renewable_listings.findall(page)
-        for item in items:
+        if limit == 0:
+            limit = 100000000000000000000
+
+        for item in items[:limit]:
             res = self.renewListing(item)
             await self.sleep()
             if res == 200:
@@ -167,4 +171,11 @@ class User:
                 self.nErrors += 1
 
         self.latestRenew = datetime.now()
-        return 0
+
+        logger.info(f'Renewing user {self.cid} listings, limit {limit}')
+        await cm[self.cid].send(P.renewd_n_items(self.cid, self.nRenews))
+        n = self.nRenews
+        self.nRenews = 0
+        self.nErrors = 0
+
+        return n
